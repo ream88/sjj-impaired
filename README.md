@@ -1,8 +1,8 @@
 # "Sing Out Joyfully" to Jehovah - improved for visually impaired
 
 This repo includes the script/app I used to create a MP3 disc for an elderly
-visually impaired brother. Each song is automatically announced using its number
-and name by merging it with a file created by [Google Text-to-Speech](https://cloud.google.com/text-to-speech).
+visually impaired brother. Each song is automatically announced using its track number
+and title by merging it with a file created by [Google Text-to-Speech](https://cloud.google.com/text-to-speech).
 
 ## Usage
 
@@ -17,4 +17,4 @@ and name by merging it with a file created by [Google Text-to-Speech](https://cl
 
 During development, [binwalk](https://github.com/ReFirmLabs/binwalk) was an essential tool which helped me to understand the structure of `.jwpub` files. Go check it out.
 
-[MIT License](./LICENSE)
+[MIT License](./LICENSE.md)
