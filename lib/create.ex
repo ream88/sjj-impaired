@@ -66,6 +66,7 @@ defmodule Create do
         "title=#{track}. #{title}",
         "-metadata",
         "comment=\"\"",
+        "-y",
         String.replace(file, "input", "output")
       ],
       parallelism: true,
