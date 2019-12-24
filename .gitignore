@@ -22,6 +22,7 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 create-*.tar
 
-# Ignore both input and output directories
+# Ignore directories
 /input/*
 /output/*
+/tmp/*

@@ -18,7 +18,7 @@ defmodule Create do
 
   defp extract_songs() do
     [input] = Path.wildcard("input/*.zip")
-    {:ok, output} = :zip.unzip(String.to_charlist(input), cwd: 'input')
+    {:ok, output} = :zip.unzip(String.to_charlist(input), cwd: 'tmp')
 
     output |> Enum.map(&to_string/1)
   end
@@ -38,7 +38,7 @@ defmodule Create do
         _ -> false
       end
 
-    {:ok, handle} = :zip.zip_open(contents, cwd: 'input')
+    {:ok, handle} = :zip.zip_open(contents, cwd: 'tmp')
     {:ok, files} = :zip.zip_list_dir(handle)
     {_, filename, _, _, _, _} = Enum.find(files, finder)
     {:ok, database} = :zip.zip_get(filename, handle)
@@ -67,7 +67,7 @@ defmodule Create do
         "-metadata",
         "comment=\"\"",
         "-y",
-        String.replace(file, "input", "output")
+        String.replace(file, "tmp", "output")
       ],
       parallelism: true,
       stderr_to_stdout: true
