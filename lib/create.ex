@@ -69,6 +69,8 @@ defmodule Create do
       [
         "-i",
         input,
+        "-ac",
+        "2",
         "-metadata",
         "album=#{album}",
         "-metadata",
@@ -86,8 +88,9 @@ defmodule Create do
   defp create_prefix({track, title}) do
     request = %GoogleApi.TextToSpeech.V1.Model.SynthesizeSpeechRequest{
       audioConfig: %GoogleApi.TextToSpeech.V1.Model.AudioConfig{
-        speakingRate: 0.9,
-        audioEncoding: "MP3"
+        audioEncoding: "MP3",
+        sampleRateHertz: 44100,
+        speakingRate: 0.9
       },
       input: %GoogleApi.TextToSpeech.V1.Model.SynthesisInput{
         ssml: "<speak>Lied Nummer #{track}<break time=\"500ms\"/>#{title}</speak>"
