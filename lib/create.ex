@@ -12,10 +12,13 @@ defmodule Create do
 
     extract_songs()
     |> Enum.zip(titles)
-    |> Task.async_stream(fn {file, song} ->
-      create_prefix(song)
-      {file, song}
-    end)
+    |> Task.async_stream(
+      fn {file, song} ->
+        create_prefix(song)
+        {file, song}
+      end,
+      timeout: 60_000
+    )
     |> Task.async_stream(fn {:ok, song} -> build_mp3(song, album) end, timeout: 60_000)
     |> Stream.run()
   end
