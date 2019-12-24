@@ -1,0 +1,3 @@
+%{
+  "esqlite": {:hex, :esqlite, "0.4.0", "8d0b88a774dceaec4fff0a6f63248efe811684591f186b6b21d4390be19bf1db", [:rebar3], [], "hexpm"},
+}
