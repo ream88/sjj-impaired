@@ -11,7 +11,7 @@ and title by merging it with a file created by [Google Text-to-Speech](https://c
   `.jwpub` in the language of your choice and put it into `input`.
 - Download all the recordings of "Sing Out Joyfully" to Jehovah as a `.zip` and put
   it into `input` as well.
-- Run `mix do compile, run`
+- Run `mix do compile, create`
 
 ## Misc
 
