@@ -12,7 +12,11 @@ defmodule Create do
 
     extract_songs()
     |> Enum.zip(titles)
-    |> Task.async_stream(&set_metadata(&1, album), timeout: 60_000)
+    |> Task.async_stream(fn {file, song} ->
+      create_prefix(song)
+      {file, song}
+    end)
+    |> Task.async_stream(fn {:ok, song} -> build_mp3(song, album) end, timeout: 60_000)
     |> Stream.run()
   end
 
@@ -54,23 +58,52 @@ defmodule Create do
     result
   end
 
-  defp set_metadata({file, {track, title}}, album) do
+  defp build_mp3({file, {track, title}}, album) do
+    input = "concat:tmp/prefix_#{track}.mp3|#{file}"
+
     System.cmd(
       "ffmpeg",
       [
         "-i",
-        file,
+        input,
         "-metadata",
         "album=#{album}",
         "-metadata",
         "title=#{track}. #{title}",
-        "-metadata",
-        "comment=\"\"",
         "-y",
         String.replace(file, "tmp", "output")
       ],
       parallelism: true,
       stderr_to_stdout: true
     )
+
+    {track, title}
+  end
+
+  defp create_prefix({track, title}) do
+    request = %GoogleApi.TextToSpeech.V1.Model.SynthesizeSpeechRequest{
+      audioConfig: %GoogleApi.TextToSpeech.V1.Model.AudioConfig{
+        speakingRate: 0.9,
+        audioEncoding: "MP3"
+      },
+      input: %GoogleApi.TextToSpeech.V1.Model.SynthesisInput{
+        ssml: "<speak>Lied Nummer #{track}<break time=\"500ms\"/>#{title}</speak>"
+      },
+      voice: %GoogleApi.TextToSpeech.V1.Model.VoiceSelectionParams{
+        languageCode: "de-DE",
+        name: "de-DE-Wavenet-D"
+      }
+    }
+
+    {:ok, token} = Goth.Token.for_scope("https://www.googleapis.com/auth/cloud-platform")
+    conn = GoogleApi.TextToSpeech.V1.Connection.new(token.token)
+
+    {:ok, response} =
+      GoogleApi.TextToSpeech.V1.Api.Text.texttospeech_text_synthesize(
+        conn,
+        body: request
+      )
+
+    File.write("tmp/prefix_#{track}.mp3", Base.decode64!(response.audioContent))
   end
 end

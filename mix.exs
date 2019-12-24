@@ -21,9 +21,9 @@ defmodule Create.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:esqlite, "~> 0.4.0"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:esqlite, "~> 0.4.0"},
+      {:google_api_text_to_speech, "~> 0.7"},
+      {:goth, "~> 1.2"}
     ]
   end
 end
