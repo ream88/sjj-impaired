@@ -11,7 +11,7 @@ defmodule Create do
     [{album}] = extract_from_database('SELECT Title FROM Document WHERE DocumentId = 0', database)
 
     extract_songs()
-    |> match_songs_with_titles(titles)
+    |> Enum.zip(titles)
     |> Task.async_stream(&set_metadata(&1, album), timeout: 60_000)
     |> Stream.run()
   end
@@ -52,10 +52,6 @@ defmodule Create do
     result = :esqlite3.q(query, conn)
     :ok = :esqlite3.close(conn)
     result
-  end
-
-  defp match_songs_with_titles(filenames, titles) do
-    Enum.zip(filenames, titles)
   end
 
   defp set_metadata({file, {track, title}}, album) do
