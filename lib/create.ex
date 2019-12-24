@@ -20,6 +20,7 @@ defmodule Create do
       timeout: 60_000
     )
     |> Task.async_stream(fn {:ok, song} -> build_mp3(song, album) end, timeout: 60_000)
+    |> Stream.each(fn _ -> IO.write(".") end)
     |> Stream.run()
   end
 
